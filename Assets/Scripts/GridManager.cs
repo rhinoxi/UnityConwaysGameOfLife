@@ -52,44 +52,21 @@ public class GridManager: MonoBehaviour
         j = int.Parse(ij[1]);
     }
 
-    public void DisableNode(int i, int j) {
-        Grid[i, j].GetComponent<SpriteRenderer>().color = deadColor;
-        // isAlive[i, j] = false;
-        aliveNodes.Remove(IndexToKey(i, j));
-
-        int newi, newj;
-        for (int di = -1; di <= 1; ++di) {
-            for (int dj = -1; dj <= 1; ++dj) {
-                if (di == 0 && dj == 0) continue;
-
-                newi = i + di;
-                newj = j + dj;
-
-                if (newi < 0) {
-                    newi = rows - 1;
-                } else if (newi == rows) {
-                    newi = 0;
-                }
-
-                if (newj < 0) {
-                    newj = columns - 1;
-                } else if (newj == columns) {
-                    newj = 0;
-                }
-
-
-                string key = IndexToKey(newi, newj);
-                neighbourAliveCount.TryGetValue(key, out var count);
-                neighbourAliveCount[key] = count - 1;
-            }
-        }
-    }
-
     public void EnableNode(int i, int j) {
         Grid[i, j].GetComponent<SpriteRenderer>().color = aliveColor;
-        // isAlive[i, j] = false;
         aliveNodes.Add(IndexToKey(i, j));
 
+        ChangeNeighbourCount(i, j, 1);
+    }
+
+    public void DisableNode(int i, int j) {
+        Grid[i, j].GetComponent<SpriteRenderer>().color = deadColor;
+        aliveNodes.Remove(IndexToKey(i, j));
+
+        ChangeNeighbourCount(i, j, -1);
+    }
+
+    private void ChangeNeighbourCount(int i, int j, int delta) {
         int newi, newj;
         for (int di = -1; di <= 1; ++di) {
             for (int dj = -1; dj <= 1; ++dj) {
@@ -112,9 +89,10 @@ public class GridManager: MonoBehaviour
 
                 string key = IndexToKey(newi, newj);
                 neighbourAliveCount.TryGetValue(key, out var count);
-                neighbourAliveCount[key] = count + 1;
+                neighbourAliveCount[key] = count + delta;
             }
         }
+
     }
 
     public void ToggleNode(int i, int j) {
@@ -134,15 +112,6 @@ public class GridManager: MonoBehaviour
         i = 0;
         j = 0;
         return false;
-    }
-
-    private void PrintHashSet(HashSet<string> n) {
-        string s = "";
-        foreach (string key in n) {
-            s += key;
-            s += " ";
-        }
-        Debug.Log(s);
     }
 
     public void RunGOL() {
