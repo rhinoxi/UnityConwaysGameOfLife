@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Editor : MonoBehaviour
+public class InputManager: MonoBehaviour
 {
     public LayerMask layer;
     public GridManager grid;
