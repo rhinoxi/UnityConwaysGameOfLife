@@ -234,8 +234,56 @@ MonoBehaviour:
   NodePrefab: {fileID: 7840361846129925225, guid: cb7e2a7aadc7e5a42b2e837a314c4d40,
     type: 3}
   GridRoot: {fileID: 304746645}
-  aliveColor: {r: 0.8773585, g: 0.36154833, b: 0.12829298, a: 1}
-  deadColor: {r: 0, g: 0, b: 0, a: 1}
+  upp: 0
+  aliveColor: {r: 0.5568628, g: 0.89411765, b: 0.6862745, a: 1}
+  deadColor: {r: 0.33333334, g: 0.47843137, b: 0.58431375, a: 1}
+--- !u!1 &336084785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 336084787}
+  - component: {fileID: 336084786}
+  m_Layer: 0
+  m_Name: HighlghtMask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &336084786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336084785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 060a30ab28185584aad9215ee3aa6dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NodePrefab: {fileID: 7840361846129925225, guid: cb7e2a7aadc7e5a42b2e837a314c4d40,
+    type: 3}
+  maskColor: {r: 0.95689994, g: 0.9716981, b: 0.0045834924, a: 1}
+  grid: {fileID: 304746646}
+--- !u!4 &336084787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336084785}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +336,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
+  m_BackGroundColor: {r: 0.39607844, g: 0.6156863, b: 0.7411765, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -329,7 +377,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.22, z: -2.73}
+  m_LocalPosition: {x: 0, y: -0.22, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -346,7 +394,7 @@ GameObject:
   - component: {fileID: 1595069675}
   - component: {fileID: 1595069674}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: UserInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -39,6 +39,7 @@ public class GridManager: MonoBehaviour
         for (int i=0; i<rows; ++i) {
             for (int j=0; j<columns; ++j) {
                 GameObject node = Instantiate(NodePrefab, new Vector3(upp * j, upp * i, nodeZaxis), Quaternion.identity, GridRoot);
+                node.GetComponent<SpriteRenderer>().color = deadColor;
                 node.layer = 8;
                 node.name = $"r{i}.c{j}";
                 Grid[i, j] = node;
