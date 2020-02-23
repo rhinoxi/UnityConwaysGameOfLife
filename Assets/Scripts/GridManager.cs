@@ -10,6 +10,10 @@ public class GridManager: MonoBehaviour
     public GameObject NodePrefab;
     public Transform GridRoot;
 
+    public Color aliveColor;
+    public Color deadColor;
+    public float NodeSize; // units
+
     private GameObject[,] Grid;
     // private bool[,] isAlive;
     // private bool[,] nextIsAlive;
@@ -18,14 +22,9 @@ public class GridManager: MonoBehaviour
     private Dictionary<string, int> neighbourAliveCount;
 
     private float nodeZaxis = 2;
-    public float upp;
-
-    public Color aliveColor;
-    public Color deadColor;
     // Start is called before the first frame update
     void Start()
     {
-        upp = 1.0f / NodePrefab.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         GenGrid();
     }
 
@@ -38,7 +37,7 @@ public class GridManager: MonoBehaviour
         neighbourAliveCount = new Dictionary<string, int> { };
         for (int i=0; i<rows; ++i) {
             for (int j=0; j<columns; ++j) {
-                GameObject node = Instantiate(NodePrefab, new Vector3(upp * j, upp * i, nodeZaxis), Quaternion.identity, GridRoot);
+                GameObject node = Instantiate(NodePrefab, new Vector3(NodeSize * j, NodeSize * i, nodeZaxis), Quaternion.identity, GridRoot);
                 node.GetComponent<SpriteRenderer>().color = deadColor;
                 node.layer = 8;
                 node.name = $"r{i}.c{j}";
@@ -109,12 +108,12 @@ public class GridManager: MonoBehaviour
     }
 
     public float NormalizePosition(float x) {
-        return Mathf.FloorToInt(x / upp + 0.5f) * upp;
+        return Mathf.FloorToInt(x / NodeSize + 0.5f) * NodeSize;
     }
 
     public bool PositionToGridIndex(float x, float y, out int i, out int j) {
-        i = Mathf.FloorToInt(y / upp + 0.5f);
-        j = Mathf.FloorToInt(x / upp + 0.5f);
+        i = Mathf.FloorToInt(y / NodeSize + 0.5f);
+        j = Mathf.FloorToInt(x / NodeSize + 0.5f);
         if (i >= 0 && i < rows && j >= 0 && j < columns) {
             return true;
         }
