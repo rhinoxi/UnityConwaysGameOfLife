@@ -46,6 +46,15 @@ public class GridManager: MonoBehaviour
         }
     }
 
+    public void ResetGrid() {
+        List<string> aliveNodesList = new List<string>(aliveNodes);
+        foreach (string key in aliveNodesList) {
+            KeyToIndex(key, out var i, out var j);
+            DisableNode(i, j);
+        }
+        nextAliveNodes.Clear();
+    }
+
     private string IndexToKey(int i, int j) {
         return $"{i}.{j}";
     }
@@ -107,8 +116,14 @@ public class GridManager: MonoBehaviour
         }
     }
 
-    public float NormalizePosition(float x) {
-        return Mathf.FloorToInt(x / NodeSize + 0.5f) * NodeSize;
+    public bool NormalizeXPosition(float x, out float xnor) {
+        xnor = Mathf.FloorToInt(x / NodeSize + 0.5f) * NodeSize;
+        return (xnor >= -NodeSize / 2f && xnor < NodeSize * (columns - 0.5f));
+    }
+
+    public bool NormalizeYPosition(float y, out float ynor) {
+        ynor = Mathf.FloorToInt(y / NodeSize + 0.5f) * NodeSize;
+        return (ynor >= -NodeSize / 2f && ynor < NodeSize * (rows - 0.5f));
     }
 
     public bool PositionToGridIndex(float x, float y, out int i, out int j) {

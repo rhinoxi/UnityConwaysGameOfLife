@@ -7,6 +7,7 @@ public class CameraManager : MonoBehaviour
     public GridManager grid;
     public float dragSpeed;
     public float zoomSpeed;
+    public float cameraSizePlus;
     // Start is called before the first frame update
     private float screenRatio;
     private float gridRatio;
@@ -48,10 +49,10 @@ public class CameraManager : MonoBehaviour
         gridRatio = (float)grid.columns / grid.rows;
 
         if (screenRatio > gridRatio) {
-            Camera.main.orthographicSize = grid.rows / 2 * grid.NodeSize + 1;
+            Camera.main.orthographicSize = grid.rows / 2 * grid.NodeSize + cameraSizePlus;
         }
         else {
-            Camera.main.orthographicSize = grid.columns / screenRatio / 2 * grid.NodeSize + 1;
+            Camera.main.orthographicSize = grid.columns / screenRatio / 2 * grid.NodeSize + cameraSizePlus;
         }
 
         Camera.main.transform.position = new Vector3((grid.columns / 2 - 0.5f) * grid.NodeSize, (grid.rows / 2 - 0.5f) * grid.NodeSize, -1);
