@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MaskManager : MonoBehaviour
+public class HighlightManager : MonoBehaviour
 {
     public GameObject NodePrefab;
-    public Color maskColor;
+    public Color hlColor;
     public GridManager grid;
 
     private Vector3 mouseWorldPos;
@@ -16,7 +16,7 @@ public class MaskManager : MonoBehaviour
     {
         GameObject node = Instantiate(NodePrefab, transform, false);
         sprite = node.GetComponent<SpriteRenderer>();
-        sprite.color = maskColor;
+        sprite.color = hlColor;
     }
 
     // Update is called once per frame

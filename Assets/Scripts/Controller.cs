@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public MaskManager mask;
     public GridManager grid;
 
     public GameObject StartIcon;
