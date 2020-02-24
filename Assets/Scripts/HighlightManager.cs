@@ -5,7 +5,6 @@ using UnityEngine;
 public class HighlightManager : MonoBehaviour {
     public GameObject NodePrefab;
     public Color hlColor;
-    public GridManager grid;
     public GameObject hlRoot;
 
     public List<GameObject> hlNodes;
@@ -19,7 +18,6 @@ public class HighlightManager : MonoBehaviour {
     }
 
     public void ResetHl() {
-        Debug.Log("???");
         HighlightByLocalPosition(new List<List<int>> { new List<int> { 0, 0 } });
     }
 
@@ -57,7 +55,7 @@ public class HighlightManager : MonoBehaviour {
     void Update()
     {
         mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (grid.NormalizeXPosition(mouseWorldPos.x, out xpos) && grid.NormalizeYPosition(mouseWorldPos.y, out ypos)) {
+        if (GridManager.NormalizeXPosition(mouseWorldPos.x, out xpos) && GridManager.NormalizeYPosition(mouseWorldPos.y, out ypos)) {
             transform.position = new Vector3(xpos, ypos, transform.position.z);
             hlRoot.SetActive(true);
         } else {

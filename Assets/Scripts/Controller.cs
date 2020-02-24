@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public GridManager grid;
-
     public GameObject StartIcon;
     public GameObject PauseIcon;
 
@@ -33,8 +32,8 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int i;
             int j;
-            if (grid.PositionToGridIndex(pos.x, pos.y, out i, out j)) {
-                grid.ToggleNode(i, j);
+            if (GridManager.PositionToGridIndex(pos.x, pos.y, out i, out j)) {
+                GridManager.ToggleNode(i, j);
             }
         }
 
@@ -67,7 +66,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     public void ResetGrid() {
-        grid.ResetGrid();
+        GridManager.ResetGrid();
     }
 
     IEnumerator RunGOL() {

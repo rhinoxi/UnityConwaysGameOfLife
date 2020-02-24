@@ -22,7 +22,12 @@ public class GridManager: MonoBehaviour
     private Dictionary<string, int> neighbourAliveCount;
 
     private float nodeZaxis = 2;
-    // Start is called before the first frame update
+
+    private static GridManager instance;
+    private void Awake() {
+        instance = this;
+    }
+
     void Start()
     {
         GenGrid();
@@ -46,13 +51,13 @@ public class GridManager: MonoBehaviour
         }
     }
 
-    public void ResetGrid() {
-        List<string> aliveNodesList = new List<string>(aliveNodes);
+    public static void ResetGrid() {
+        List<string> aliveNodesList = new List<string>(instance.aliveNodes);
         foreach (string key in aliveNodesList) {
-            KeyToIndex(key, out var i, out var j);
+            instance.KeyToIndex(key, out var i, out var j);
             DisableNode(i, j);
         }
-        nextAliveNodes.Clear();
+        instance.nextAliveNodes.Clear();
     }
 
     private string IndexToKey(int i, int j) {
@@ -65,18 +70,25 @@ public class GridManager: MonoBehaviour
         j = int.Parse(ij[1]);
     }
 
-    public void EnableNode(int i, int j) {
-        Grid[i, j].GetComponent<SpriteRenderer>().color = aliveColor;
-        aliveNodes.Add(IndexToKey(i, j));
+    public static void EnableNode(int i, int j) {
+        string key = instance.IndexToKey(i, j);
+        if (!instance.aliveNodes.Contains(key)) {
+            instance.Grid[i, j].GetComponent<SpriteRenderer>().color = instance.aliveColor;
+            instance.aliveNodes.Add(key);
 
-        ChangeNeighbourCount(i, j, 1);
+            instance.ChangeNeighbourCount(i, j, 1);
+        }
     }
 
-    public void DisableNode(int i, int j) {
-        Grid[i, j].GetComponent<SpriteRenderer>().color = deadColor;
-        aliveNodes.Remove(IndexToKey(i, j));
+    public static void DisableNode(int i, int j) {
+        string key = instance.IndexToKey(i, j);
 
-        ChangeNeighbourCount(i, j, -1);
+        if (instance.aliveNodes.Contains(key)) {
+            instance.Grid[i, j].GetComponent<SpriteRenderer>().color = instance.deadColor;
+            instance.aliveNodes.Remove(key);
+
+            instance.ChangeNeighbourCount(i, j, -1);
+        }
     }
 
     private void ChangeNeighbourCount(int i, int j, int delta) {
@@ -108,25 +120,25 @@ public class GridManager: MonoBehaviour
 
     }
 
-    public void ToggleNode(int i, int j) {
-        if (aliveNodes.Contains(IndexToKey(i, j))) {
+    public static void ToggleNode(int i, int j) {
+        if (instance.aliveNodes.Contains(instance.IndexToKey(i, j))) {
             DisableNode(i, j);
         } else {
             EnableNode(i, j);
         }
     }
 
-    public bool NormalizeXPosition(float x, out float xnor) {
-        xnor = Mathf.FloorToInt(x / NodeSize + 0.5f) * NodeSize;
-        return (xnor >= -NodeSize / 2f && xnor < NodeSize * (columns - 0.5f));
+    public static bool NormalizeXPosition(float x, out float xnor) {
+        xnor = Mathf.FloorToInt(x / instance.NodeSize + 0.5f) * instance.NodeSize;
+        return (xnor >= -instance.NodeSize / 2f && xnor < instance.NodeSize * (instance.columns - 0.5f));
     }
 
-    public bool NormalizeYPosition(float y, out float ynor) {
-        ynor = Mathf.FloorToInt(y / NodeSize + 0.5f) * NodeSize;
-        return (ynor >= -NodeSize / 2f && ynor < NodeSize * (rows - 0.5f));
+    public static bool NormalizeYPosition(float y, out float ynor) {
+        ynor = Mathf.FloorToInt(y / instance.NodeSize + 0.5f) * instance.NodeSize;
+        return (ynor >= -instance.NodeSize / 2f && ynor < instance.NodeSize * (instance.rows - 0.5f));
     }
 
-    public void EnableNodeByPosition(float x, float y) {
+    public static void EnableNodeByPosition(float x, float y) {
         int i;
         int j;
         if (PositionToGridIndex(x, y, out i, out j)) {
@@ -134,10 +146,10 @@ public class GridManager: MonoBehaviour
         }
     }
 
-    public bool PositionToGridIndex(float x, float y, out int i, out int j) {
-        i = Mathf.FloorToInt(y / NodeSize + 0.5f);
-        j = Mathf.FloorToInt(x / NodeSize + 0.5f);
-        if (i >= 0 && i < rows && j >= 0 && j < columns) {
+    public static bool PositionToGridIndex(float x, float y, out int i, out int j) {
+        i = Mathf.FloorToInt(y / instance.NodeSize + 0.5f);
+        j = Mathf.FloorToInt(x / instance.NodeSize + 0.5f);
+        if (i >= 0 && i < instance.rows && j >= 0 && j < instance.columns) {
             return true;
         }
         i = 0;
