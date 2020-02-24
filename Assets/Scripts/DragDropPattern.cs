@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    public HighlightManager hl;
     private List<List<int>> data;
     private void Awake() {
         data = new List<List<int>> { };
@@ -18,14 +17,14 @@ public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 
     public void OnBeginDrag(PointerEventData eventData) {
         // Change Highlight Grid
-        hl.HighlightByLocalPosition(data);
+        HighlightManager.HighlightByLocalPosition(data);
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        foreach (GameObject node in hl.hlNodes) {
+        foreach (GameObject node in HighlightManager.hlNodes) {
             GridManager.EnableNodeByPosition(node.transform.position.x, node.transform.position.y);
         }
-        hl.ResetHl();
+        HighlightManager.ResetHl();
     }
 
     public void OnDrag(PointerEventData eventData) {

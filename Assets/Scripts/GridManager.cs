@@ -25,7 +25,9 @@ public class GridManager: MonoBehaviour
 
     private static GridManager instance;
     private void Awake() {
-        instance = this;
+        if (instance == null) {
+            instance = this;
+        }
     }
 
     void Start()
@@ -82,7 +84,6 @@ public class GridManager: MonoBehaviour
 
     public static void DisableNode(int i, int j) {
         string key = instance.IndexToKey(i, j);
-
         if (instance.aliveNodes.Contains(key)) {
             instance.Grid[i, j].GetComponent<SpriteRenderer>().color = instance.deadColor;
             instance.aliveNodes.Remove(key);

@@ -368,7 +368,6 @@ MonoBehaviour:
     type: 3}
   hlColor: {r: 0.44748366, g: 0.7830189, b: 0.23268957, a: 1}
   hlRoot: {fileID: 1714472874}
-  hlNodes: []
 --- !u!4 &336084787
 Transform:
   m_ObjectHideFlags: 0
@@ -635,7 +634,7 @@ MonoBehaviour:
   grid: {fileID: 304746646}
   dragSpeed: 10
   zoomSpeed: 100
-  cameraSizePlus: 5
+  cameraSizePlus: 0.4
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -723,16 +722,16 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1792583809}
-  - {fileID: 959534380}
   - {fileID: 1491185737}
+  - {fileID: 959534380}
   - {fileID: 1714906939}
   m_Father: {fileID: 1916833553}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 75.14, y: 0.58751}
-  m_SizeDelta: {x: 634.89, y: 96.475}
+  m_AnchoredPosition: {x: -0.0000076761935, y: 0.58751}
+  m_SizeDelta: {x: 484.6, y: 96.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &719577184
 MonoBehaviour:
@@ -752,7 +751,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 100
+  m_Spacing: 40
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1106,7 +1105,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 719577183}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1445,7 +1444,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 719577183}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

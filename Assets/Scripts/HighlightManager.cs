@@ -7,21 +7,29 @@ public class HighlightManager : MonoBehaviour {
     public Color hlColor;
     public GameObject hlRoot;
 
-    public List<GameObject> hlNodes;
+    public static List<GameObject> hlNodes;
     private Vector3 mouseWorldPos;
     private SpriteRenderer sprite;
     private float xpos;
     private float ypos;
+    private static HighlightManager instance;
+
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+        }
+    }
 
     void Start() {
+        hlNodes = new List<GameObject>();
         GenHlNode();
     }
 
-    public void ResetHl() {
+    public static void ResetHl() {
         HighlightByLocalPosition(new List<List<int>> { new List<int> { 0, 0 } });
     }
 
-    public void HighlightByLocalPosition(List<List<int>> positions) {
+    public static void HighlightByLocalPosition(List<List<int>> positions) {
         int hlNodesLen = hlNodes.Count;
         int count = 0;
         foreach (List<int> pos in positions) {
@@ -39,14 +47,16 @@ public class HighlightManager : MonoBehaviour {
         }
     }
 
-    private void GenHlNode() {
+    private static void GenHlNode() {
         GenHlNode(new Vector3(0, 0, 0));
     }
 
-    private void GenHlNode(Vector3 pos) {
-        GameObject node = Instantiate(NodePrefab, hlRoot.transform, false);
-        node.GetComponent<SpriteRenderer>().color = hlColor;
+    private static void GenHlNode(Vector3 pos) {
+        GameObject node = Instantiate(instance.NodePrefab, instance.hlRoot.transform, false);
+        node.GetComponent<SpriteRenderer>().color = instance.hlColor;
         node.transform.localPosition = pos;
+        Debug.Log(node);
+        Debug.Log(hlNodes);
         hlNodes.Add(node);
     }
 
