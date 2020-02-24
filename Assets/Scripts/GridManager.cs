@@ -126,6 +126,14 @@ public class GridManager: MonoBehaviour
         return (ynor >= -NodeSize / 2f && ynor < NodeSize * (rows - 0.5f));
     }
 
+    public void EnableNodeByPosition(float x, float y) {
+        int i;
+        int j;
+        if (PositionToGridIndex(x, y, out i, out j)) {
+            EnableNode(i, j);
+        }
+    }
+
     public bool PositionToGridIndex(float x, float y, out int i, out int j) {
         i = Mathf.FloorToInt(y / NodeSize + 0.5f);
         j = Mathf.FloorToInt(x / NodeSize + 0.5f);
