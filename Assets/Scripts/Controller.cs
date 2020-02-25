@@ -10,6 +10,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public GameObject StartIcon;
     public GameObject PauseIcon;
     public ScrollRect patternBar;
+    public GameObject rulePanel;
 
     private float scrollDelta;
     private float scrollDeltaTotal = 0;
@@ -131,5 +132,15 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         scrollDeltaTotal = 0;
         yield break;
+    }
+
+    public void ShowRule() {
+        rulePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void CloseRule() {
+        rulePanel.SetActive(false);
+        Time.timeScale = 1;
     }
 }
