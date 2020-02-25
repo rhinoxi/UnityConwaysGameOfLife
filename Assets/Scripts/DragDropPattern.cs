@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
 {
     public TextAsset patternFile;
     private Pattern p;
+    private RectTransform patternImage;
     private void Start() {
         p = JsonUtility.FromJson<Pattern>(patternFile.text);
         Normalize();
+        patternImage = GetComponent<RectTransform>();
     }
 
     public void Normalize() {
@@ -48,5 +51,22 @@ public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     }
 
     public void OnDrag(PointerEventData eventData) {
+    }
+
+    private void RotatePattern() {
+        patternImage.Rotate(new Vector3(0, 0, -90));
+
+        float temp = 0;
+        foreach (Point point in p.localPos) {
+            temp = point.x;
+            point.x = point.y;
+            point.y = -temp;
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            RotatePattern();
+        }
     }
 }
