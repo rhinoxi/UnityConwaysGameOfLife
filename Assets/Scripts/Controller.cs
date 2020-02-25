@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public GridManager grid;
     public GameObject StartIcon;
     public GameObject PauseIcon;
+    public ScrollRect patternBar;
+
+    private float scrollDelta;
+    private float scrollDeltaTotal = 0;
+    private Coroutine scrollCoroutine;
+    private float scrollSpeed = 0.0f;
+    private float scrollTime = 0.3f;
 
     public static float Interval {
         get {
@@ -25,6 +33,12 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Coroutine co;
     private void Start() {
         Interval = 1;
+
+        float scrollBarWidth = patternBar.GetComponent<RectTransform>().sizeDelta.x;
+        float scrollContentWidth = patternBar.content.sizeDelta.x;
+        float scrollContentCount = patternBar.content.childCount;
+
+        scrollDelta = scrollContentWidth / scrollContentCount / (scrollContentWidth - scrollBarWidth);
     }
     void Update()
     {
@@ -85,5 +99,37 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData) {
         mouseOverUI = false;
+    }
+
+    public void ScrollLeft() {
+        ScrollPatternBar(true);
+    }
+
+    public void ScrollRight() {
+        ScrollPatternBar(false);
+    }
+
+    public void ScrollPatternBar(bool scrollLeft) {
+        if (scrollLeft) {
+            scrollDeltaTotal = -scrollDelta;
+        } else {
+            scrollDeltaTotal = scrollDelta;
+        }
+
+        if (scrollCoroutine != null) {
+            StopCoroutine(scrollCoroutine);
+        }
+        scrollCoroutine = StartCoroutine(ScrollSmoothly());
+
+    }
+
+    IEnumerator ScrollSmoothly() {
+        float final = Mathf.Clamp01(patternBar.horizontalNormalizedPosition + scrollDeltaTotal);
+        while (Mathf.Abs(patternBar.horizontalNormalizedPosition - final) > 1e-3) {
+            patternBar.horizontalNormalizedPosition = Mathf.SmoothDamp(patternBar.horizontalNormalizedPosition, final, ref scrollSpeed, scrollTime);
+            yield return null;
+        }
+        scrollDeltaTotal = 0;
+        yield break;
     }
 }
