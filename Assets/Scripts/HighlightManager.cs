@@ -26,17 +26,17 @@ public class HighlightManager : MonoBehaviour {
     }
 
     public static void ResetHl() {
-        HighlightByLocalPosition(new List<List<int>> { new List<int> { 0, 0 } });
+        HighlightByLocalPosition(new List<Point> { new Point(0, 0) });
     }
 
-    public static void HighlightByLocalPosition(List<List<int>> positions) {
+    public static void HighlightByLocalPosition(List<Point> positions) {
         int hlNodesLen = hlNodes.Count;
         int count = 0;
-        foreach (List<int> pos in positions) {
+        foreach (Point p in positions) {
             if (count >= hlNodesLen) {
-                GenHlNode(new Vector3(pos[0], pos[1]));
+                GenHlNode(new Vector3(p.x, p.y));
             } else {
-                hlNodes[count].transform.localPosition = new Vector3(pos[0], pos[1]);
+                hlNodes[count].transform.localPosition = new Vector3(p.x, p.y);
             }
             ++count;
         }
@@ -55,8 +55,6 @@ public class HighlightManager : MonoBehaviour {
         GameObject node = Instantiate(instance.NodePrefab, instance.hlRoot.transform, false);
         node.GetComponent<SpriteRenderer>().color = instance.hlColor;
         node.transform.localPosition = pos;
-        Debug.Log(node);
-        Debug.Log(hlNodes);
         hlNodes.Add(node);
     }
 
@@ -65,7 +63,7 @@ public class HighlightManager : MonoBehaviour {
     void Update()
     {
         mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        if (GridManager.NormalizeXPosition(mouseWorldPos.x, out xpos) && GridManager.NormalizeYPosition(mouseWorldPos.y, out ypos)) {
+        if (GridManager.NearestNodeX(mouseWorldPos.x, out xpos) && GridManager.NearestNodeY(mouseWorldPos.y, out ypos)) {
             transform.position = new Vector3(xpos, ypos, transform.position.z);
             hlRoot.SetActive(true);
         } else {

@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class GridManager: MonoBehaviour
 {
-
+    private static GridManager instance;
     public int rows = 10;
     public int columns = 10;
+    public static int Rows {
+        get {
+            return instance.rows;
+        }
+    }
+    public static int Columns {
+        get {
+            return instance.columns;
+        }
+    }
+
     public GameObject NodePrefab;
     public Transform GridRoot;
 
     public Color aliveColor;
     public Color deadColor;
-    public float NodeSize; // units
+    public float NodeSize = 1.1f; // units per node
 
     private GameObject[,] Grid;
-    // private bool[,] isAlive;
-    // private bool[,] nextIsAlive;
     private HashSet<string> aliveNodes;
     private HashSet<string> nextAliveNodes;
     private Dictionary<string, int> neighbourAliveCount;
 
     private float nodeZaxis = 2;
 
-    private static GridManager instance;
     private void Awake() {
         if (instance == null) {
             instance = this;
@@ -37,8 +45,6 @@ public class GridManager: MonoBehaviour
 
     private void GenGrid() {
         Grid = new GameObject[rows, columns];
-        // isAlive = new bool[rows, columns];
-        // nextIsAlive = new bool[rows, columns];
         aliveNodes = new HashSet<string> { };
         nextAliveNodes = new HashSet<string> { };
         neighbourAliveCount = new Dictionary<string, int> { };
@@ -129,12 +135,16 @@ public class GridManager: MonoBehaviour
         }
     }
 
-    public static bool NormalizeXPosition(float x, out float xnor) {
+    public static float NormalizeToNodeSize(float x) {
+        return x * instance.NodeSize;
+    }
+
+    public static bool NearestNodeX(float x, out float xnor) {
         xnor = Mathf.FloorToInt(x / instance.NodeSize + 0.5f) * instance.NodeSize;
         return (xnor >= -instance.NodeSize / 2f && xnor < instance.NodeSize * (instance.columns - 0.5f));
     }
 
-    public static bool NormalizeYPosition(float y, out float ynor) {
+    public static bool NearestNodeY(float y, out float ynor) {
         ynor = Mathf.FloorToInt(y / instance.NodeSize + 0.5f) * instance.NodeSize;
         return (ynor >= -instance.NodeSize / 2f && ynor < instance.NodeSize * (instance.rows - 0.5f));
     }

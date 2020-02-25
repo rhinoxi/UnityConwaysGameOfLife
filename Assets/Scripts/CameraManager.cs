@@ -49,13 +49,13 @@ public class CameraManager : MonoBehaviour
         gridRatio = (float)grid.columns / grid.rows;
 
         if (screenRatio > gridRatio) {
-            Camera.main.orthographicSize = grid.rows / 2 * grid.NodeSize * (1 + cameraSizePlus);
+            Camera.main.orthographicSize = GridManager.NormalizeToNodeSize(GridManager.Rows / 2) * (1 + cameraSizePlus);
         }
         else {
-            Camera.main.orthographicSize = grid.columns / screenRatio / 2 * grid.NodeSize * (1 + cameraSizePlus);
+            Camera.main.orthographicSize = GridManager.NormalizeToNodeSize(GridManager.Columns / screenRatio / 2) * (1 + cameraSizePlus);
         }
 
-        Camera.main.transform.position = new Vector3((grid.columns / 2 - 0.5f) * grid.NodeSize, (grid.rows / 2 - 0.5f) * grid.NodeSize, -1);
+        Camera.main.transform.position = new Vector3(GridManager.NormalizeToNodeSize(GridManager.Columns / 2 - 0.5f), GridManager.NormalizeToNodeSize(GridManager.Rows / 2 - 0.5f), -1);
     }
 
 }

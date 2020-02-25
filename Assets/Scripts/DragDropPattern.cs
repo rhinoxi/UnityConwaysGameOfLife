@@ -5,19 +5,39 @@ using UnityEngine.EventSystems;
 
 public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    private List<List<int>> data;
-    private void Awake() {
-        data = new List<List<int>> { };
-        data.Add(new List<int>{0, 0});
-        data.Add(new List<int>{1, 0});
-        data.Add(new List<int>{2, 0});
-        data.Add(new List<int>{2, 1});
-        data.Add(new List<int>{1, 2});
+    public TextAsset patternFile;
+    private Pattern p;
+    private void Start() {
+        p = JsonUtility.FromJson<Pattern>(patternFile.text);
+        Normalize();
+    }
+
+    public void Normalize() {
+        float centerX = 0;
+        float centerY = 0;
+
+        foreach (Point point in p.localPos) {
+            point.x = GridManager.NormalizeToNodeSize(point.x);
+            point.y = GridManager.NormalizeToNodeSize(point.y);
+            centerX += point.x;
+            centerY += point.y;
+        }
+
+        centerX /= p.localPos.Count;
+        centerY /= p.localPos.Count;
+
+        GridManager.NearestNodeX(centerX, out centerX);
+        GridManager.NearestNodeY(centerY, out centerY);
+
+        foreach (Point point in p.localPos) {
+            point.x -= centerX;
+            point.y -= centerY;
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
         // Change Highlight Grid
-        HighlightManager.HighlightByLocalPosition(data);
+        HighlightManager.HighlightByLocalPosition(p.localPos);
     }
 
     public void OnEndDrag(PointerEventData eventData) {
