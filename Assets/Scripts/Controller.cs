@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -11,6 +12,8 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public GameObject PauseIcon;
     public ScrollRect patternBar;
     public GameObject rulePanel;
+    public TextMeshProUGUI generationText;
+    public TextMeshProUGUI aliveNodesText;
 
     private float scrollDelta;
     private float scrollDeltaTotal = 0;
@@ -82,11 +85,15 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void ResetGrid() {
         GridManager.ResetGrid();
+        generationText.text = grid.gen.ToString();
+        aliveNodesText.text = grid.AliveNodesCount.ToString();
     }
 
     IEnumerator RunGOL() {
         while (true) {
             grid.RunGOL();
+            generationText.text = grid.gen.ToString();
+            aliveNodesText.text = grid.AliveNodesCount.ToString();
             yield return new WaitForSeconds(Interval);
         }
     }

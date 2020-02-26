@@ -18,6 +18,12 @@ public class GridManager: MonoBehaviour
         }
     }
 
+    public int gen;
+    public int AliveNodesCount {
+        get {
+            return aliveNodes.Count;
+        }
+    }
     public GameObject NodePrefab;
     public Transform GridRoot;
 
@@ -36,6 +42,7 @@ public class GridManager: MonoBehaviour
         if (instance == null) {
             instance = this;
         }
+        gen = 0;
     }
 
     void Start()
@@ -66,6 +73,8 @@ public class GridManager: MonoBehaviour
             DisableNode(i, j);
         }
         instance.nextAliveNodes.Clear();
+
+        instance.gen = 0;
     }
 
     private string IndexToKey(int i, int j) {
@@ -199,5 +208,6 @@ public class GridManager: MonoBehaviour
         }
 
         nextAliveNodes.Clear();
+        ++gen;
     }
 }
