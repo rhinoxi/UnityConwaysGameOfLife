@@ -972,6 +972,7 @@ MonoBehaviour:
     type: 3}
   hlColor: {r: 0.6313726, g: 0.8117647, b: 0.8117647, a: 1}
   hlRoot: {fileID: 1714472874}
+  mainCamera: {fileID: 519420031}
 --- !u!4 &336084787
 Transform:
   m_ObjectHideFlags: 0
@@ -4983,6 +4984,7 @@ MonoBehaviour:
   rulePanel: {fileID: 1532487946}
   generationText: {fileID: 636869669}
   aliveNodesText: {fileID: 70498197}
+  mainCamera: {fileID: 519420031}
 --- !u!1001 &6703989503663915483
 PrefabInstance:
   m_ObjectHideFlags: 0

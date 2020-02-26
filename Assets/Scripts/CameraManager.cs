@@ -15,31 +15,33 @@ public class CameraManager : MonoBehaviour
     private float newZoom;
     private float newOrthographicSize;
     private Vector3 mouseOrigin;
+    private Camera mainCamera;
     void Start()
     {
+        mainCamera = Camera.main;
         Center();
-        newOrthographicSize = Camera.main.orthographicSize;
+        newOrthographicSize = mainCamera.orthographicSize;
     }
 
     private void Update() {
         if (Input.GetMouseButtonDown(1)) {
-            mouseOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             return;
         }
 
         if (Input.GetMouseButton(1)) {
-            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - mouseOrigin;
+            Vector3 pos = mainCamera.ScreenToWorldPoint(Input.mousePosition) - mouseOrigin;
             transform.Translate(pos * -1 * dragSpeed * Time.deltaTime, Space.Self);
         }
 
         newZoom = Input.GetAxis("Mouse ScrollWheel");
         if (newZoom != 0) {
             zoom = newZoom;
-            newOrthographicSize = Camera.main.orthographicSize * (1 + -1 * zoom * zoomSpeed * Time.deltaTime);
+            newOrthographicSize = mainCamera.orthographicSize * (1 + -1 * zoom * zoomSpeed * Time.deltaTime);
         }
 
-        if (Mathf.Abs(Camera.main.orthographicSize - newOrthographicSize) > 1e-3) {
-            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, newOrthographicSize, 0.2f);
+        if (Mathf.Abs(mainCamera.orthographicSize - newOrthographicSize) > 1e-3) {
+            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, newOrthographicSize, 0.2f);
         }
 
     }
@@ -49,13 +51,13 @@ public class CameraManager : MonoBehaviour
         gridRatio = (float)grid.columns / grid.rows;
 
         if (screenRatio > gridRatio) {
-            Camera.main.orthographicSize = GridManager.NormalizeToNodeSize(GridManager.Rows / 2) * (1 + cameraSizePlus);
+            mainCamera.orthographicSize = GridManager.NormalizeToNodeSize(GridManager.Rows / 2) * (1 + cameraSizePlus);
         }
         else {
-            Camera.main.orthographicSize = GridManager.NormalizeToNodeSize(GridManager.Columns / screenRatio / 2) * (1 + cameraSizePlus);
+            mainCamera.orthographicSize = GridManager.NormalizeToNodeSize(GridManager.Columns / screenRatio / 2) * (1 + cameraSizePlus);
         }
 
-        Camera.main.transform.position = new Vector3(GridManager.NormalizeToNodeSize(GridManager.Columns / 2 - 0.5f), GridManager.NormalizeToNodeSize(GridManager.Rows / 2 - 0.5f), -1);
+        mainCamera.transform.position = new Vector3(GridManager.NormalizeToNodeSize(GridManager.Columns / 2 - 0.5f), GridManager.NormalizeToNodeSize(GridManager.Rows / 2 - 0.5f), -1);
     }
 
 }

@@ -19,6 +19,7 @@ public class GridManager: MonoBehaviour
         }
     }
 
+    [HideInInspector]
     public int gen;
     public int AliveNodesCount {
         get {

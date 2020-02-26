@@ -8,7 +8,9 @@ public class HighlightManager : MonoBehaviour {
     public Color hlColor;
     public GameObject hlRoot;
 
+
     public static List<GameObject> hlNodes;
+    private Camera mainCamera;
     private Vector3 mouseWorldPos;
     private SpriteRenderer sprite;
     private float xpos;
@@ -22,6 +24,7 @@ public class HighlightManager : MonoBehaviour {
     }
 
     void Start() {
+        mainCamera = Camera.main;
         hlNodes = new List<GameObject>();
         GenHlNode();
     }
@@ -63,7 +66,7 @@ public class HighlightManager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         if (GridManager.NearestNodeX(mouseWorldPos.x, out xpos) && GridManager.NearestNodeY(mouseWorldPos.y, out ypos)) {
             transform.position = new Vector3(xpos, ypos, transform.position.z);
             hlRoot.SetActive(true);

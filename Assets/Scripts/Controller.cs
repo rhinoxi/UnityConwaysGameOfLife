@@ -15,6 +15,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public TextMeshProUGUI generationText;
     public TextMeshProUGUI aliveNodesText;
 
+    private Camera mainCamera;
     private float scrollDelta;
     private float scrollDeltaTotal = 0;
     private Coroutine scrollCoroutine;
@@ -36,6 +37,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private Coroutine co;
     private void Start() {
+        mainCamera = Camera.main;
         Interval = 1;
 
         float scrollBarWidth = patternBar.GetComponent<RectTransform>().sizeDelta.x;
@@ -47,7 +49,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && !mouseOverUI) {
-            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 pos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             int i;
             int j;
             if (GridManager.PositionToGridIndex(pos.x, pos.y, out i, out j)) {
