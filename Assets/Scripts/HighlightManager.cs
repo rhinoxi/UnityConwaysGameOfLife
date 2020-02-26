@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class HighlightManager : MonoBehaviour {
     public GameObject NodePrefab;
@@ -52,7 +53,7 @@ public class HighlightManager : MonoBehaviour {
     }
 
     private static void GenHlNode(Vector3 pos) {
-        GameObject node = Instantiate(instance.NodePrefab, instance.hlRoot.transform, false);
+        GameObject node = PrefabUtility.InstantiatePrefab(instance.NodePrefab, instance.hlRoot.transform) as GameObject;
         node.GetComponent<SpriteRenderer>().color = instance.hlColor;
         node.transform.localPosition = pos;
         hlNodes.Add(node);
