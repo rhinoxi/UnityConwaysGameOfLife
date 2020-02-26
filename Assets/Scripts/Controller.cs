@@ -85,6 +85,10 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void ResetGrid() {
         GridManager.ResetGrid();
+        UpdateStats();
+    }
+
+    private void UpdateStats() {
         generationText.text = grid.gen.ToString();
         aliveNodesText.text = grid.AliveNodesCount.ToString();
     }
@@ -92,8 +96,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     IEnumerator RunGOL() {
         while (true) {
             grid.RunGOL();
-            generationText.text = grid.gen.ToString();
-            aliveNodesText.text = grid.AliveNodesCount.ToString();
+            UpdateStats();
             yield return new WaitForSeconds(Interval);
         }
     }
