@@ -20,11 +20,11 @@ public class Pattern
 [Serializable]
 public class Point
 {
-    public float x;
-    public float y;
+    public int i;
+    public int j;
 
-    public Point(float i, float j) {
-        x = i;
-        y = j;
+    public Point(int _i, int _j) {
+        i = _i;
+        j = _j;
     }
 }

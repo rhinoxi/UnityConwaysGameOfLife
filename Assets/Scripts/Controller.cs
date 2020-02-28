@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
@@ -78,7 +77,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         foreach (string file in Directory.GetFiles(savedSceneRootPath)) {
             cleanFileName = Path.GetFileNameWithoutExtension(file);
             savedScenes.Add(cleanFileName);
-            GameObject sceneItem = PrefabUtility.InstantiatePrefab(sceneItemPrefab) as GameObject;
+            GameObject sceneItem = Instantiate(sceneItemPrefab) as GameObject;
             sceneItem.transform.SetParent(sceneList, false);
             sceneItem.GetComponentInChildren<TextMeshProUGUI>().text = cleanFileName;
             sceneItem.GetComponent<Toggle>().group = sceneToggleGroup;
@@ -258,8 +257,7 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             GridManager.ResetGrid();
             // Enable Node
             foreach (Point point in p.localPos) {
-                GridManager.PositionToGridIndex(point.x, point.y, out var i, out var j);
-                GridManager.EnableNode(i, j);
+                GridManager.EnableNode(point.i, point.j);
             }
         }
         CloseLoad();

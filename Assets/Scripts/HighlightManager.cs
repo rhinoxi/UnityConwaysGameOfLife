@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class HighlightManager : MonoBehaviour {
     public GameObject NodePrefab;
@@ -33,14 +32,15 @@ public class HighlightManager : MonoBehaviour {
         HighlightByLocalPosition(new List<Point> { new Point(0, 0) });
     }
 
-    public static void HighlightByLocalPosition(List<Point> positions) {
+    public static void HighlightByLocalPosition(List<Point> points) {
         int hlNodesLen = hlNodes.Count;
         int count = 0;
-        foreach (Point p in positions) {
+        foreach (Point p in points) {
             if (count >= hlNodesLen) {
-                GenHlNode(new Vector3(p.x, p.y));
+                // TODO:
+                GenHlNode(new Vector3(p.j, p.i));
             } else {
-                hlNodes[count].transform.localPosition = new Vector3(p.x, p.y);
+                hlNodes[count].transform.localPosition = new Vector3(p.j, p.i);
             }
             ++count;
         }
@@ -56,7 +56,7 @@ public class HighlightManager : MonoBehaviour {
     }
 
     private static void GenHlNode(Vector3 pos) {
-        GameObject node = PrefabUtility.InstantiatePrefab(instance.NodePrefab, instance.hlRoot.transform) as GameObject;
+        GameObject node = Instantiate(instance.NodePrefab, instance.hlRoot.transform);
         node.GetComponent<SpriteRenderer>().color = instance.hlColor;
         node.transform.localPosition = pos;
         hlNodes.Add(node);

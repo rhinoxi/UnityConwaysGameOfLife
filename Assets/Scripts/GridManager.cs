@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class GridManager: MonoBehaviour
 {
@@ -59,7 +58,7 @@ public class GridManager: MonoBehaviour
         neighbourAliveCount = new Dictionary<string, int> { };
         for (int i=0; i<rows; ++i) {
             for (int j=0; j<columns; ++j) {
-                GameObject node = PrefabUtility.InstantiatePrefab(NodePrefab, GridRoot) as GameObject;
+                GameObject node = Instantiate(NodePrefab, GridRoot) as GameObject;
                 node.transform.position = new Vector3(NodeSize * j, NodeSize * i, nodeZaxis);
                 node.GetComponent<SpriteRenderer>().color = deadColor;
                 node.layer = 8;
@@ -85,7 +84,7 @@ public class GridManager: MonoBehaviour
 
         foreach (string nodeKey in aliveNodes) {
             KeyToIndex(nodeKey, out var i, out var j);
-            points.Add(new Point(j, i));
+            points.Add(new Point(i, j));
         }
 
         Pattern scene = new Pattern(name, points);

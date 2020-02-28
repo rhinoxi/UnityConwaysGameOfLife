@@ -16,25 +16,20 @@ public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     }
 
     public void Normalize() {
-        float centerX = 0;
-        float centerY = 0;
+        int centerI = 0;
+        int centerJ = 0;
 
         foreach (Point point in p.localPos) {
-            point.x = GridManager.NormalizeToNodeSize(point.x);
-            point.y = GridManager.NormalizeToNodeSize(point.y);
-            centerX += point.x;
-            centerY += point.y;
+            centerI += point.i;
+            centerJ += point.j;
         }
 
-        centerX /= p.localPos.Count;
-        centerY /= p.localPos.Count;
-
-        GridManager.NearestNodeX(centerX, out centerX);
-        GridManager.NearestNodeY(centerY, out centerY);
+        centerI /= p.localPos.Count;
+        centerJ /= p.localPos.Count;
 
         foreach (Point point in p.localPos) {
-            point.x -= centerX;
-            point.y -= centerY;
+            point.i -= centerI;
+            point.j -= centerJ;
         }
     }
 
@@ -56,11 +51,11 @@ public class DragDropPattern : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     private void RotatePattern() {
         patternImage.Rotate(new Vector3(0, 0, -90));
 
-        float temp = 0;
+        int temp = 0;
         foreach (Point point in p.localPos) {
-            temp = point.x;
-            point.x = point.y;
-            point.y = -temp;
+            temp = point.j;
+            point.j = point.i;
+            point.i = -temp;
         }
     }
 
