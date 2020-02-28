@@ -34,6 +34,10 @@ public class CameraManager : MonoBehaviour
             transform.Translate(pos * -1 * dragSpeed * Time.deltaTime, Space.Self);
         }
 
+        if (Controller.mouseOverUI) {
+            return;
+        }
+
         newZoom = Input.GetAxis("Mouse ScrollWheel");
         if (newZoom != 0) {
             zoom = newZoom;

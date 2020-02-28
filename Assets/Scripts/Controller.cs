@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
@@ -12,9 +15,18 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public GameObject PauseIcon;
     public ScrollRect patternBar;
     public GameObject rulePanel;
+    public GameObject savePanel;
+    public GameObject loadPanel;
     public TextMeshProUGUI generationText;
     public TextMeshProUGUI aliveNodesText;
+    public TMP_InputField sceneName;
+    public Button saveButton;
+    public ToggleGroup sceneToggleGroup;
+    public RectTransform sceneList;
+    public GameObject sceneItemPrefab;
 
+    private string savedSceneRootPath;
+    private HashSet<string> savedScenes;
     private Camera mainCamera;
     private float scrollDelta;
     private float scrollDeltaTotal = 0;
@@ -45,7 +57,35 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         float scrollContentCount = patternBar.content.childCount;
 
         scrollDelta = scrollContentWidth / scrollContentCount / (scrollContentWidth - scrollBarWidth);
+
+        savedSceneRootPath = Path.Combine(Application.persistentDataPath, "Scenes");
+        if (!Directory.Exists(savedSceneRootPath)) {
+            Directory.CreateDirectory(savedSceneRootPath);
+        }
+
+        savedScenes = new HashSet<string>();
+        RefreshSceneList();
     }
+
+    private void RefreshSceneList() {
+        foreach (RectTransform t in sceneList) {
+            GameObject.Destroy(t.gameObject);
+        }
+        savedScenes.Clear();
+
+        string cleanFileName;
+
+        foreach (string file in Directory.GetFiles(savedSceneRootPath)) {
+            cleanFileName = Path.GetFileNameWithoutExtension(file);
+            savedScenes.Add(cleanFileName);
+            GameObject sceneItem = PrefabUtility.InstantiatePrefab(sceneItemPrefab) as GameObject;
+            sceneItem.transform.SetParent(sceneList, false);
+            sceneItem.GetComponentInChildren<TextMeshProUGUI>().text = cleanFileName;
+            sceneItem.GetComponent<Toggle>().group = sceneToggleGroup;
+        }
+    }
+
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && !mouseOverUI) {
@@ -154,5 +194,89 @@ public class Controller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void CloseRule() {
         rulePanel.SetActive(false);
         Time.timeScale = 1;
+    }
+
+    public void ShowSave() {
+        if (grid.AliveNodesCount == 0) {
+            return;
+        }
+
+        savePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void CheckUniqueScene() {
+        if (sceneName.text.Length == 0 || savedScenes.Contains(sceneName.text)) {
+            saveButton.interactable = false;
+        } else {
+            saveButton.interactable = true;
+        }
+
+    }
+
+    public void CloseSave() {
+        sceneName.text = "";
+        savePanel.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void SaveScene() {
+        if (grid.AliveNodesCount == 0 || savedScenes.Contains(sceneName.text)) {
+            CloseSave();
+            return;
+        }
+
+        Pattern scene = grid.CurrentGridToPattern(sceneName.text);
+        string json = JsonUtility.ToJson(scene);
+        string path = Path.Combine(savedSceneRootPath, sceneName.text);
+
+        File.WriteAllText(path, json);
+        CloseSave();
+        RefreshSceneList();
+    }
+
+    public void ShowLoad() {
+        loadPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    private string ReadFile(string path) {
+        StreamReader sr = new StreamReader(path);
+        string content = sr.ReadToEnd();
+        sr.Close();
+        return content;
+    }
+
+    public void LoadScene() {
+        Toggle selected = sceneToggleGroup.ActiveToggles().FirstOrDefault();
+        if (selected != null) {
+            // Read data from json
+            string file = Path.Combine(savedSceneRootPath, selected.GetComponentInChildren<TextMeshProUGUI>().text);
+            Pattern p = JsonUtility.FromJson<Pattern>(ReadFile(file));
+
+            // Reset Grid
+            GridManager.ResetGrid();
+            // Enable Node
+            foreach (Point point in p.localPos) {
+                GridManager.PositionToGridIndex(point.x, point.y, out var i, out var j);
+                GridManager.EnableNode(i, j);
+            }
+        }
+        CloseLoad();
+    }
+
+    public void CloseLoad() {
+        loadPanel.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void DeleteScene() {
+        Toggle selected = sceneToggleGroup.ActiveToggles().FirstOrDefault();
+        if (selected != null) {
+            // Read data from json
+            string file = Path.Combine(savedSceneRootPath, selected.GetComponentInChildren<TextMeshProUGUI>().text);
+            File.Delete(file);
+        }
+        RefreshSceneList();
     }
 }

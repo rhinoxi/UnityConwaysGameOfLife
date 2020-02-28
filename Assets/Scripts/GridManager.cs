@@ -19,8 +19,7 @@ public class GridManager: MonoBehaviour
         }
     }
 
-    [HideInInspector]
-    public int gen;
+    [HideInInspector] public int gen;
     public int AliveNodesCount {
         get {
             return aliveNodes.Count;
@@ -34,6 +33,7 @@ public class GridManager: MonoBehaviour
     public float NodeSize = 1.1f; // units per node
 
     private GameObject[,] Grid;
+
     private HashSet<string> aliveNodes;
     private HashSet<string> nextAliveNodes;
     private Dictionary<string, int> neighbourAliveCount;
@@ -78,6 +78,19 @@ public class GridManager: MonoBehaviour
         instance.nextAliveNodes.Clear();
 
         instance.gen = 0;
+    }
+
+    public Pattern CurrentGridToPattern(string name) {
+        List<Point> points = new List<Point>();
+
+        foreach (string nodeKey in aliveNodes) {
+            KeyToIndex(nodeKey, out var i, out var j);
+            points.Add(new Point(j, i));
+        }
+
+        Pattern scene = new Pattern(name, points);
+
+        return scene;
     }
 
     private string IndexToKey(int i, int j) {
